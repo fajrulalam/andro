@@ -16,8 +16,10 @@ import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class MainActivity extends AppCompatActivity {
     Button button;
@@ -32,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         DownloadTask task = new DownloadTask();
         city = cityName.getText().toString().trim();
 
+        try {
+            city = URLEncoder.encode(city, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         try {
             task.execute("https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=1edb0f5016ef741b9692cd794e09de65");
         }catch (Exception e) {
@@ -91,8 +98,15 @@ public class MainActivity extends AppCompatActivity {
                     main = jsonPart.getString("main");
                     desc = jsonPart.getString("description");
 
-                    textView.setText("The weather in "+city+" is "+ main+ ". It is " + desc );
-                    textView.setVisibility(View.VISIBLE);
+                    if (!main.equals("") && !desc.equals("")) {
+                        textView.setText("The weather in "+city+" is "+ main+ ". It is " + desc );
+                        textView.setVisibility(View.VISIBLE);
+                    } else {
+                        textView.setText("The city you search for doesn't exist");
+                        textView.setVisibility(View.VISIBLE);
+                    }
+
+
 
 
                 }
