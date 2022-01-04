@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
             try {
                 JSONObject jsonObject = new JSONObject(s);
-                String something;
+                String somethings;
             }catch (Exception e) {
                 e.printStackTrace();
             }
