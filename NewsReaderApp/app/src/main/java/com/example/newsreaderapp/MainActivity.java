@@ -4,9 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
@@ -54,8 +56,13 @@ public class MainActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             try {
-                JSONObject jsonObject = new JSONObject(s);
-                String somethings;
+                JSONArray jsonArray = new JSONArray(s);
+                int maxNumberOfStories = 20;
+                int i = 0;
+                while (i < maxNumberOfStories) {
+                    Log.i("ID", "" + jsonArray.getJSONArray(i));
+                    i++;
+                }
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -78,8 +85,13 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(arrayAdapter);
 
 
-
-
         //Execute connection to API
+        DownloadTask task = new DownloadTask();
+
+        try {
+            task.execute("https://hacker-news.firebaseio.com/v0/topstories.json?print=pretty");
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
